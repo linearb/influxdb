@@ -58,7 +58,9 @@ func newExporter(server server.Interface, cfg *exporterConfig) (*exporter, error
 	}
 
 	store := tsdb.NewStore(server.TSDBConfig().Dir)
-	store.WithLogger(server.Logger())
+	if server.Logger() != nil {
+		store.WithLogger(server.Logger())
+	}
 	store.EngineOptions.Config = server.TSDBConfig()
 	store.EngineOptions.EngineVersion = server.TSDBConfig().Engine
 	store.EngineOptions.IndexVersion = server.TSDBConfig().Index
